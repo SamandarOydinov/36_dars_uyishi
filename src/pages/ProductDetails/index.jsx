@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useProductById } from "../../hooks"; 
 import "./ProductDetails.scss"; 
@@ -8,6 +8,12 @@ import { Breadcrumbs } from "../../components";
 const ProductDetailPage = () => {
   const { id } = useParams(); 
   const { data: product, isLoading, isError, error } = useProductById(id);
+  console.log(product);
+
+  useEffect(() => {
+    window.scroll(0, 0)
+  }, [id])
+  
 
   if (isLoading) {
     return (

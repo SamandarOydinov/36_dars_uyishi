@@ -3,7 +3,7 @@ import './ProductCard.scss';
 
 import { FaRegStar } from 'react-icons/fa';
 import { HalfStarIcon, StarIcon } from '../../assets/icons';
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 
 const ProductCard = ({ product }) => {
   if (!product) {
@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
     }
     const emptyStarsCount = 5 - stars.length;
     for (let i = 0; i < emptyStarsCount; i++) {
-      stars.push(<FaRegStar key={`empty-${i}`} className="star-icon" />);
+      stars.push(<NavLink to={`/productDetail/${product?.id}`}><FaRegStar key={`empty-${i}`} className="star-icon" /></NavLink>);
     }
     return stars;
   };
@@ -48,10 +48,13 @@ const ProductCard = ({ product }) => {
   }
 
   return (
-    <Link to={`/products/${id}`} className="product-card-link">
       <div className="product-card">
         <div className="product-card__image-container">
+          <NavLink to={`product/${product?.id}`}>
+
           <img src={mainImage} alt={title} className="product-card__image" />
+          </NavLink>
+
           {discountPercentage > 0 && (
             <span className="product-card__discount-badge">
               -{discountPercentage}%
@@ -80,7 +83,6 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </div>
-    </Link>
   );
 };
 

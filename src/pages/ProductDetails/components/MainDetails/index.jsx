@@ -24,9 +24,9 @@ const renderStars = (currentRating) => {
 };
 
 const MainDetails = ({ product }) => {
-  // product dan kerakli ma'lumotlarni olamiz, size ni ham
+  
   const {
-    id: productId, // Savatga qo'shish uchun
+    id: productId, 
     title,
     price,
     oldPrice,
@@ -40,6 +40,7 @@ const MainDetails = ({ product }) => {
       { name: "Navy Blue", value: "#000080", code: "navy" },
     ],
   } = product || {};
+  console.log(product);
 
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedColor, setSelectedColor] = useState(null);
@@ -125,7 +126,7 @@ const MainDetails = ({ product }) => {
     <div className="main-details">
       <div className="main-details__gallery">
         <div className="main-details__thumbnails">
-          {images.slice(0, 3).map((imgSrc, index) => (
+          {images.map((imgSrc, index) => (
             <div
               key={imgSrc || index}
               className={`thumbnail-item ${
@@ -138,7 +139,7 @@ const MainDetails = ({ product }) => {
           ))}
         </div>
         <div className="main-details__main-image">
-          <img src={selectedImage} alt={title} />
+          <img src={selectedImage || null} alt={title} />
         </div>
       </div>
 

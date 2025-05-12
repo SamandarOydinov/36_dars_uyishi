@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import {
-  getProductByIdApi,
+  
+  
   getProductsApi,
-  getProductsByCategoryApi,
 } from '../api';
+import { getProductByIdApi } from '../api/productId';
 
 export const useAllProducts = () => {
   return useQuery({
