@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Breadcrumbs.scss";
-import { FaChevronRight } from "react-icons/fa"; // Ajratuvchi ikonka
+import { FaChevronRight } from "react-icons/fa"; 
 
 const Breadcrumbs = ({ items }) => {
   if (!items || items.length === 0) {

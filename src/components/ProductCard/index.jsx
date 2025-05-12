@@ -1,13 +1,13 @@
-import React from "react";
-import "./ProductCard.scss";
-// Yulduzchalar uchun ikonkalar (masalan, react-icons dan)
-import { FaRegStar } from "react-icons/fa";
-import { HalfStarIcon, StarIcon } from "../../assets/icons";
-import { Link } from "react-router";
+import React from 'react';
+import './ProductCard.scss';
+
+import { FaRegStar } from 'react-icons/fa';
+import { HalfStarIcon, StarIcon } from '../../assets/icons';
+import { Link } from 'react-router';
 
 const ProductCard = ({ product }) => {
   if (!product) {
-    return null; // Agar mahsulot ma'lumoti bo'lmasa, hech nima ko'rsatma
+    return null;
   }
 
   const {
@@ -16,16 +16,14 @@ const ProductCard = ({ product }) => {
     price,
     oldPrice,
     rating,
-    // count, // Hozircha ishlatmaymiz, lekin kelajakda qo'shish mumkin
     images,
   } = product;
 
   const mainImage =
     images && images.length > 0
       ? images[0]
-      : "https://via.placeholder.com/300x300?text=No+Image"; // Rasm bo'lmasa placeholder
+      : 'https://via.placeholder.com/300x300?text=No+Image';
 
-  // Reyting yulduzchalarini render qilish uchun funksiya
   const renderStars = (currentRating) => {
     const stars = [];
     const fullStars = Math.floor(currentRating);
@@ -44,7 +42,6 @@ const ProductCard = ({ product }) => {
     return stars;
   };
 
-  // Chegirma foizini hisoblash
   let discountPercentage = 0;
   if (oldPrice && price < oldPrice) {
     discountPercentage = Math.round(((oldPrice - price) / oldPrice) * 100);

@@ -33,42 +33,34 @@ const MainDetails = ({ product }) => {
     rating,
     description,
     images = [],
-    size: productSizes = [], // API dan keladigan o'lchamlar, "size" deb nomlangan
-    // Hozircha availableColors statik qoladi, agar API dan kelsa, shuni ham product dan oling
+    size: productSizes = [],
     availableColors = [
       { name: "Olive Green", value: "#556B2F", code: "olive" },
       { name: "Deep Teal", value: "#008080", code: "teal" },
       { name: "Navy Blue", value: "#000080", code: "navy" },
     ],
-  } = product || {}; // product undefined bo'lsa, bo'sh obyekt olamiz
+  } = product || {};
 
-  // State'larni boshlang'ich null yoki bo'sh qiymatlar bilan e'lon qilamiz
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
-  // 1. Mahsulot (product) o'zgarganda state'larni yangilash uchun useEffect
   useEffect(() => {
     if (product) {
-      // product mavjudligini tekshiramiz
-      // Rasmlarni o'rnatish
       if (images && images.length > 0) {
         setSelectedImage(images[0]);
       } else {
         setSelectedImage("https://via.placeholder.com/600x600?text=No+Image");
       }
 
-      // Ranglarni o'rnatish (agar API dan kelmasa, statik qoladi)
       if (availableColors && availableColors.length > 0) {
         setSelectedColor(availableColors[0]?.code || null);
       } else {
         setSelectedColor(null);
       }
 
-      // O'lchamlarni o'rnatish (API dan kelgan "productSizes" dan)
       if (productSizes && productSizes.length > 0) {
-        // Agar "Large" mavjud bo'lsa, uni tanlaymiz, aks holda birinchisini
         setSelectedSize(
           productSizes.includes("Large") ? "Large" : productSizes[0] || null
         );
@@ -76,10 +68,9 @@ const MainDetails = ({ product }) => {
         setSelectedSize(null);
       }
 
-      // Miqdorni boshlang'ich holatga keltirish
       setQuantity(1);
     }
-  }, [product]); // Bu useEffect faqat "product" o'zgarganda ishga tushadi
+  }, [product]); 
 
   const handleThumbnailClick = (imageSrc) => {
     setSelectedImage(imageSrc);
@@ -103,7 +94,6 @@ const MainDetails = ({ product }) => {
       return;
     }
     if (!selectedColor && availableColors && availableColors.length > 0) {
-      // Agar ranglar mavjud bo'lsa-yu tanlanmagan bo'lsa
       alert("Please select a color.");
       return;
     }
@@ -122,9 +112,8 @@ const MainDetails = ({ product }) => {
     );
   };
 
-  // Agar product hali yuklanmagan bo'lsa, loading holatini ko'rsatish mumkin
   if (!product) {
-    return <div>Loading product details...</div>; // Yoki skelet loader
+    return <div>Loading product details...</div>;
   }
 
   let discountPercentage = 0;
@@ -138,7 +127,7 @@ const MainDetails = ({ product }) => {
         <div className="main-details__thumbnails">
           {images.slice(0, 3).map((imgSrc, index) => (
             <div
-              key={imgSrc || index} // Agar imgSrc unikal bo'lmasa, index ishlatish mumkin, lekin imgSrc yaxshiroq
+              key={imgSrc || index}
               className={`thumbnail-item ${
                 selectedImage === imgSrc ? "active" : ""
               }`}

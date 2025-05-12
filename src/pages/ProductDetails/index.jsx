@@ -1,12 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useProductById } from "../../hooks"; // Hooks faylingizga yo'lni moslang
-import "./ProductDetails.scss"; // Sahifa uchun maxsus stillar
+import { useProductById } from "../../hooks"; 
+import "./ProductDetails.scss"; 
 import { MainDetails } from "./components";
 import { Breadcrumbs } from "../../components";
 
 const ProductDetailPage = () => {
-  const { id } = useParams(); // URL dan id ni olamiz
+  const { id } = useParams(); 
   const { data: product, isLoading, isError, error } = useProductById(id);
 
   if (isLoading) {
@@ -25,14 +25,14 @@ const ProductDetailPage = () => {
     );
   }
 
-  // Breadcrumbs uchun ma'lumot (taxminiy)
+  
   const breadcrumbItems = [
     { label: "Home", path: "/" },
-    { label: "Shop", path: "/shop" }, // Yoki sizning do'kon sahifangiz
+    { label: "Shop", path: "/shop" }, 
     {
       label: product.category || "Category",
       path: `/category/${product.category}`,
-    }, // API dan kategoriya kelsa
+    }, 
     { label: product.title, path: `/products/${product.id}` },
   ];
 

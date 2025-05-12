@@ -8,7 +8,7 @@
         margin: 0;
         display: flex;
         align-items: center;
-        flex-wrap: wrap; // Kichik ekranlar uchun
+        flex-wrap: wrap; 
     }
 
     &__item {
@@ -34,7 +34,7 @@
     }
 
     &__current {
-        color: #000; // Joriy sahifa nomi
+        color: #000; 
         font-weight: 500;
     }
 }

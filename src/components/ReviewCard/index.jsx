@@ -1,14 +1,14 @@
 import React from "react";
 import "./ReviewCard.scss";
-import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa"; // Yulduzchalar uchun
-import { BsFillCheckCircleFill } from "react-icons/bs"; // Tasdiqlangan xaridor belgisi uchun
-import { FiMoreHorizontal } from "react-icons/fi"; // "Ko'proq" belgisi uchun
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa"; 
+import { BsFillCheckCircleFill } from "react-icons/bs"; 
+import { FiMoreHorizontal } from "react-icons/fi"; 
 
-// Reyting yulduzchalarini render qilish uchun funksiya (ProductCard dan ko'chirilgan)
+
 const renderStars = (currentRating, maxStars = 5) => {
   const stars = [];
   const fullStars = Math.floor(currentRating);
-  const hasHalfStar = currentRating % 1 >= 0.4; // 0.4 va undan yuqori bo'lsa yarim yulduzcha
+  const hasHalfStar = currentRating % 1 >= 0.4; 
 
   for (let i = 0; i < fullStars; i++) {
     stars.push(<FaStar key={`full-${i}`} className="star-icon filled" />);
@@ -29,16 +29,16 @@ const ReviewCard = ({ review }) => {
   }
 
   const {
-    rating, // Raqam, masalan 3.5, 4
-    reviewerName, // String, masalan "Ethan R."
-    isVerified, // Boolean, true yoki false
-    reviewText, // String, sharh matni
-    datePosted, // String, masalan "August 16, 2023"
-    // onMoreOptionsClick // Funksiya, ... tugmasi bosilganda
+    rating, 
+    reviewerName, 
+    isVerified, 
+    reviewText, 
+    datePosted, 
+    
   } = review;
 
-  // Sanani formatlash (agar kerak bo'lsa)
-  // Hozircha string keladi deb qabul qilamiz
+  
+  
   const displayDate = `Posted on ${datePosted}`;
 
   return (
@@ -48,7 +48,7 @@ const ReviewCard = ({ review }) => {
         <button
           className="review-card__more-options-btn"
           aria-label="More options"
-          // onClick={onMoreOptionsClick} // Agar kerak bo'lsa
+          
         >
           <FiMoreHorizontal />
         </button>
