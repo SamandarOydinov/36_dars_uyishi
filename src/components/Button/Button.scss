@@ -1,0 +1,63 @@
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    border-radius: 62px;
+    font-size: 16px;
+    border: none;
+}
+
+.btn-primary {
+    background-color: black;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #F0F0F0;
+    color: black;
+}
+
+.btn-white {
+    background-color: white;
+    color: black;
+}
+
+.btn-large {
+    height: 56px;
+    background-color: #000; // Qora tugma
+    color: #fff;
+    border: none;
+    padding: 14px 25px; // Kattaroq padding
+    border-radius: 25px; // Yumaloqroq
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    flex-grow: 1; // Mavjud bo'sh joyni egallashi uchun (agar quantity kichik bo'lsa)
+
+    @media (max-width: 480px) {
+        width: 100%; // To'liq kenglik
+    }
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+}
+
+.btn-medium {
+    height: 48px;
+}
+
+.btn-small {
+    height: 42px;
+}
+
+.button.btn-full {
+    width: 100%;
+}
+
+.button.p-none {
+    padding: auto 12px;
+}

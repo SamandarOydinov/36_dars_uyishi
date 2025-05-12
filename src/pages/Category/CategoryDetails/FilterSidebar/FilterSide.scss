@@ -1,0 +1,151 @@
+.filter-side-wrapper {
+
+    // ...
+    .price-range-slider {
+        // Yangi klass nomi
+        margin-top: 35px; // Narx ko'rinishi uchun joy
+
+        // * {
+        //     // Bu stilni o'zgartirish kerak bo'lishi mumkin, juda umumiy
+        //     // background-color: #000 !important; 
+        // }
+
+        // Range slider uchun maxsus stillar
+        .range-slider__thumb {
+            background-color: #000 !important; // Slider tutqichi qora
+            border: 2px solid #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            width: 18px;
+            height: 18px;
+        }
+
+        .range-slider__range {
+            background-color: #000 !important; // Tanlangan diapazon qora
+            height: 4px;
+        }
+
+        .range-slider__track {
+            background-color: #e0e0e0 !important; // Orqa fon
+            height: 4px;
+        }
+
+        .range-slider-value {
+            // Narxni ko'rsatish uchun
+            font-weight: 600;
+            font-size: 12px;
+            position: absolute;
+            bottom: -22px; // Tutqichdan pastroqda
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: transparent !important;
+            color: #333;
+            white-space: nowrap;
+        }
+    }
+
+    .accordion-body.price-accordion {
+        // Narx uchun balandlik
+        height: 100px; // Yoki kerakli balandlik
+    }
+
+    .apply-filter-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px; // Yuqoridagi elementdan masofa
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.85;
+        }
+    }
+}
+
+.filter-side-wrapper {
+    width: 295px;
+    border: 1px solid #00000010;
+    padding: 20px 24px;
+    border-radius: 20px;
+
+    .filter-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .hr-line {
+        width: 100%;
+        height: 1px;
+        margin-bottom: 24px;
+        background-color: #00000010;
+    }
+
+    .filter-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .accordion {
+        margin-bottom: 24px;
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            p {
+                margin-top: 0;
+            }
+        }
+    }
+
+    .arrow {
+        transform: rotate(0);
+        transition: .3s;
+    }
+
+    .arrow-top {
+        transform: rotate(-90deg);
+    }
+
+    .arrow-bottom {
+        transform: rotate(90deg);
+    }
+
+    .accordion-body {
+        height: 70px;
+        transition: .3s;
+        overflow: hidden;
+    }
+
+    .color-accordion {
+        height: 100px;
+    }
+
+    .accordion-body.hide {
+        height: 0;
+    }
+
+    .hola * {
+        background-color: #000 !important;
+    }
+
+    .hola {
+        margin-top: 20px;
+    }
+}
+
+.filter-item.active {
+    background-color: #f0f0f0; // Yoki boshqa bir ajratuvchi stil
+    font-weight: bold;
+    // Yoki faqat span uchun:
+    // span { font-weight: bold; } 
+}

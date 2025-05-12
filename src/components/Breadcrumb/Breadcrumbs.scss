@@ -1,0 +1,40 @@
+.breadcrumbs {
+    margin-bottom: 25px;
+    font-size: 14px;
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap; // Kichik ekranlar uchun
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+    }
+
+    &__link {
+        color: #555;
+        text-decoration: none;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #000;
+            text-decoration: underline;
+        }
+    }
+
+    &__separator {
+        margin: 0 8px;
+        color: #aaa;
+        font-size: 10px;
+    }
+
+    &__current {
+        color: #000; // Joriy sahifa nomi
+        font-weight: 500;
+    }
+}
