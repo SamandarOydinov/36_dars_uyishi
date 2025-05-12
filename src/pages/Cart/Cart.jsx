@@ -26,7 +26,6 @@ const Cart = () => {
                 <div className="quantity-controls">
                   <button
                     onClick={() => {
-                      /* Decrease quantity logic */
                     }}
                   >
                     -
@@ -34,7 +33,6 @@ const Cart = () => {
                   <span>{item.quantity}</span>
                   <button
                     onClick={() => {
-                      /* Increase quantity logic */
                     }}
                   >
                     +
