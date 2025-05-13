@@ -1,19 +1,35 @@
-import React, { useState, useEffect } from "react";
-import "./MainDetails.scss";
-import { FaRegStar, FaMinus, FaPlus } from "react-icons/fa";
-import { HalfStarIcon, StarIcon } from "../../../../assets/icons";
-import { FiCheck } from "react-icons/fi";
-import { Button } from "../../../../components";
+
+import React, { useState, useEffect, memo } from 'react';
+import './MainDetails.scss'; 
+import { FaRegStar, FaMinus, FaPlus } from 'react-icons/fa';
+import { HalfStarIcon, StarIcon } from '../../../../assets/icons';
+import { FiCheck } from 'react-icons/fi';
+import { Button } from '../../../../components'; 
+import { useCart } from '../../../../context/CartContext';
+import { toast } from 'react-toastify';
+
 
 const renderStars = (currentRating) => {
   const stars = [];
+  if (
+    typeof currentRating !== 'number' ||
+    currentRating < 0 ||
+    currentRating > 5
+  ) {
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <FaRegStar key={`empty-placeholder-${i}`} className="star-icon" />,
+      );
+    }
+    return stars;
+  }
   const fullStars = Math.floor(currentRating);
   const hasHalfStar = currentRating % 1 >= 0.5;
 
   for (let i = 0; i < fullStars; i++) {
     stars.push(<StarIcon key={`full-${i}`} className="star-icon filled" />);
   }
-  if (hasHalfStar) {
+  if (hasHalfStar && stars.length < 5) {
     stars.push(<HalfStarIcon key="half" className="star-icon filled" />);
   }
   const emptyStarsCount = 5 - stars.length;
@@ -23,10 +39,11 @@ const renderStars = (currentRating) => {
   return stars;
 };
 
-const MainDetails = ({ product }) => {
-  
+const MainDetails = memo(({ product }) => {
+  const { addToCart } = useCart();
+
   const {
-    id: productId, 
+    id: productId,
     title,
     price,
     oldPrice,
@@ -34,91 +51,114 @@ const MainDetails = ({ product }) => {
     description,
     images = [],
     size: productSizes = [],
-    availableColors = [
-      { name: "Olive Green", value: "#556B2F", code: "olive" },
-      { name: "Deep Teal", value: "#008080", code: "teal" },
-      { name: "Navy Blue", value: "#000080", code: "navy" },
-    ],
+    colors: productColorsAPI = [],
   } = product || {};
-  console.log(product);
 
-  const [selectedImage, setSelectedImage] = useState("");
+  const defaultStaticColors = [
+    { name: 'Dark Olive', value: '#4F5442', code: 'dark-olive-detail' },
+    { name: 'Deep Navy', value: '#3B425A', code: 'deep-navy-detail' },
+    { name: 'Steel Blue', value: '#607D8B', code: 'steel-blue-detail' },
+  ];
+
+  const availableColors =
+    productColorsAPI && productColorsAPI.length > 0
+      ? productColorsAPI
+      : defaultStaticColors;
+
+  const [selectedImage, setSelectedImage] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (product) {
-      if (images && images.length > 0) {
-        setSelectedImage(images[0]);
-      } else {
-        setSelectedImage("https://via.placeholder.com/600x600?text=No+Image");
-      }
+      setSelectedImage(
+        images && images.length > 0
+          ? images[0]
+          : 'https://via.placeholder.com/600x600?text=No+Image',
+      );
 
-      if (availableColors && availableColors.length > 0) {
-        setSelectedColor(availableColors[0]?.code || null);
-      } else {
-        setSelectedColor(null);
-      }
+      const currentAvailableColors =
+        productColorsAPI && productColorsAPI.length > 0
+          ? productColorsAPI
+          : defaultStaticColors;
+      setSelectedColor(
+        currentAvailableColors && currentAvailableColors.length > 0
+          ? currentAvailableColors[0]?.code || null
+          : null,
+      );
 
       if (productSizes && productSizes.length > 0) {
-        setSelectedSize(
-          productSizes.includes("Large") ? "Large" : productSizes[0] || null
-        );
+        const defaultSize = productSizes.includes('M')
+          ? 'M'
+          : productSizes.includes('L')
+            ? 'L'
+            : productSizes.includes('XL')
+              ? 'XL'
+              : productSizes.includes('S')
+                ? 'S'
+                : productSizes[0] || null;
+        setSelectedSize(defaultSize);
       } else {
         setSelectedSize(null);
       }
-
+      setQuantity(1);
+    } else {
+      setSelectedImage(null);
+      setSelectedColor(null);
+      setSelectedSize(null);
       setQuantity(1);
     }
   }, [product]); 
 
-  const handleThumbnailClick = (imageSrc) => {
-    setSelectedImage(imageSrc);
-  };
-
-  const handleColorSelect = (colorCode) => {
-    setSelectedColor(colorCode);
-  };
-
-  const handleSizeSelect = (size) => {
-    setSelectedSize(size);
-  };
-
+  const handleThumbnailClick = (imageSrc) => setSelectedImage(imageSrc);
+  const handleColorSelect = (colorCode) => setSelectedColor(colorCode);
+  const handleSizeSelect = (size) => setSelectedSize(size);
   const handleQuantityChange = (amount) => {
-    setQuantity((prev) => Math.max(1, prev + amount));
+    setQuantity((prevQuantity) => Math.max(1, prevQuantity + amount));
   };
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      alert("Please select a size.");
+    if (productSizes && productSizes.length > 0 && !selectedSize) {
+      toast.error(`Iltimos o'lchamini kiriting.`);
       return;
     }
-    if (!selectedColor && availableColors && availableColors.length > 0) {
-      alert("Please select a color.");
+    if (availableColors && availableColors.length > 0 && !selectedColor) {
+      toast.error(`Iltimos rangini kiriting.`);
       return;
     }
-    console.log({
+
+    const productToAdd = {
       productId: productId,
       title: title,
+      price: price,
+      images: images,
       color: selectedColor,
       size: selectedSize,
       quantity: quantity,
-      price: price,
-    });
-    alert(
-      `Added ${quantity} of ${title} (Size: ${selectedSize}${
-        selectedColor ? `, Color: ${selectedColor}` : ""
-      }) to cart!`
-    );
+    };
+    console.log('MainDetails: Product to add to cart:', productToAdd);
+    addToCart(productToAdd);
   };
 
   if (!product) {
-    return <div>Loading product details...</div>;
+    return (
+      <div
+        className="loading-details"
+        style={{ padding: '40px', textAlign: 'center' }}
+      >
+        Loading product details...
+      </div>
+    );
   }
 
   let discountPercentage = 0;
-  if (oldPrice && price < oldPrice) {
+  if (
+    typeof oldPrice === 'number' &&
+    typeof price === 'number' &&
+    price < oldPrice &&
+    oldPrice > 0
+  ) {
     discountPercentage = Math.round(((oldPrice - price) / oldPrice) * 100);
   }
 
@@ -126,61 +166,86 @@ const MainDetails = ({ product }) => {
     <div className="main-details">
       <div className="main-details__gallery">
         <div className="main-details__thumbnails">
-          {images.map((imgSrc, index) => (
+          {(images || []).slice(0, 3).map((imgSrc, index) => (
             <div
-              key={imgSrc || index}
+              key={imgSrc || `thumb-${index}-${productId}`}
               className={`thumbnail-item ${
-                selectedImage === imgSrc ? "active" : ""
+                selectedImage === imgSrc ? 'active' : ''
               }`}
               onClick={() => handleThumbnailClick(imgSrc)}
             >
-              <img src={imgSrc} alt={`${title} thumbnail ${index + 1}`} />
+              {imgSrc ? (
+                <img
+                  src={imgSrc}
+                  alt={`${title || 'Product'} thumbnail ${index + 1}`}
+                />
+              ) : (
+                <div
+                  className="thumbnail-placeholder"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%',
+                    color: '#ccc',
+                  }}
+                >
+                  ?
+                </div>
+              )}
             </div>
           ))}
         </div>
         <div className="main-details__main-image">
-          <img src={selectedImage || null} alt={title} />
+          {selectedImage ? (
+            <img src={selectedImage} alt={title || 'Product main image'} />
+          ) : (
+            <img
+              src="https://via.placeholder.com/600x600?text=No+Image+Available"
+              alt="Product image placeholder"
+            />
+          )}
         </div>
       </div>
 
       <div className="main-details__info">
-        <h1 className="info__title">{title}</h1>
-
-        <div className="info__rating-price">
-          {rating !== undefined && rating !== null && (
-            <div className="rating-stars">
-              {renderStars(rating)}
-              <span className="rating-value">{rating.toFixed(1)}/5</span>
-            </div>
-          )}
-        </div>
+        <h1 className="info__title">{title || 'Product Title'}</h1>
+        {typeof rating === 'number' && rating >= 0 && (
+          <div className="info__rating-stars">
+            {renderStars(rating)}
+            <span className="rating-value">{rating.toFixed(1)}/5</span>
+          </div>
+        )}
         <div className="info__price">
-          <span className="current-price">${price?.toFixed(2)}</span>
-          {oldPrice && price < oldPrice && (
+          <span className="current-price">
+            ${typeof price === 'number' ? price.toFixed(2) : 'N/A'}
+          </span>
+          {typeof oldPrice === 'number' && price < oldPrice && (
             <>
               <span className="old-price">${oldPrice.toFixed(2)}</span>
-              <span className="discount-badge">-{discountPercentage}%</span>
+              {discountPercentage > 0 && (
+                <span className="discount-badge">-{discountPercentage}%</span>
+              )}
             </>
           )}
         </div>
-
-        <p className="info__description">{description}</p>
-
-        {/* Rang tanlash */}
+        <p className="info__description">
+          {description || 'No description available.'}
+        </p>
         {availableColors && availableColors.length > 0 && (
           <div className="info__options-group">
-            <h3 className="options-label">Select Colors</h3>
+            <h3 className="options-label">Select Color</h3>
             <div className="color-selector">
               {availableColors.map((color) => (
                 <button
                   key={color.code}
                   className={`color-option ${
-                    selectedColor === color.code ? "selected" : ""
+                    selectedColor === color.code ? 'selected' : ''
                   }`}
                   style={{ backgroundColor: color.value }}
                   onClick={() => handleColorSelect(color.code)}
-                  aria-label={`Select color ${color.name}`}
-                  title={color.name}
+                  aria-label={`Select color ${color.name || color.code}`}
+                  title={color.name || color.code}
                 >
                   {selectedColor === color.code && (
                     <FiCheck className="check-icon" />
@@ -190,33 +255,39 @@ const MainDetails = ({ product }) => {
             </div>
           </div>
         )}
-
-        {/* O'lcham tanlash (API dan kelgan productSizes dan foydalanamiz) */}
         {productSizes && productSizes.length > 0 && (
           <div className="info__options-group">
             <h3 className="options-label">Choose Size</h3>
             <div className="size-selector">
-              {productSizes.map((size) => (
-                <button
-                  key={size}
-                  className={`size-option ${
-                    selectedSize === size ? "selected" : ""
-                  }`}
-                  onClick={() => handleSizeSelect(size)}
-                >
-                  {size}
-                </button>
-              ))}
+              {['M', 'L', 'XL', 'S']
+                .filter((size) => productSizes.includes(size))
+                .map(
+                  (
+                    size, 
+                  ) => (
+                    <button
+                      key={size}
+                      className={`size-option ${
+                        selectedSize === size ? 'selected' : ''
+                      }`}
+                      onClick={() => handleSizeSelect(size)}
+                    >
+                      {size}
+                    </button>
+                  ),
+                )}
             </div>
           </div>
         )}
-        <hr className="info__divider" />
-
+        {(availableColors?.length > 0 || productSizes?.length > 0) && (
+          <hr className="info__divider" />
+        )}
         <div className="info__actions">
           <div className="quantity-selector">
             <button
               onClick={() => handleQuantityChange(-1)}
               aria-label="Decrease quantity"
+              disabled={quantity <= 1}
             >
               <FaMinus />
             </button>
@@ -228,13 +299,18 @@ const MainDetails = ({ product }) => {
               <FaPlus />
             </button>
           </div>
-          <Button size="large" px="140" onClick={handleAddToCart}>
+          <Button
+            type="primary"
+            size="large"
+            onClick={handleAddToCart}
+            style={{ flexGrow: 1 }}
+          >
             Add to Cart
           </Button>
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default MainDetails;
